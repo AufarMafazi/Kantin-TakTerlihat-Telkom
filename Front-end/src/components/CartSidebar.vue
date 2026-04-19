@@ -1,6 +1,6 @@
 <script setup>
 defineProps(['cart', 'total'])
-defineEmits(['bayar'])
+defineEmits(['bayar', 'tambah', 'kurang'])
 
 const formatRp = (angka) => {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka)
@@ -18,7 +18,6 @@ const formatRp = (angka) => {
     <div class="flex-grow p-4 overflow-y-auto bg-[#FDF8F3]/50">
       <div v-if="cart.length === 0" class="flex flex-col items-center justify-center h-full text-gray-400">
         <p class="font-medium text-lg">Keranjang masih kosong</p>
-        <p class="text-sm">Silakan pilih menu di samping</p>
       </div>
       
       <div v-else class="space-y-3">
@@ -27,10 +26,16 @@ const formatRp = (angka) => {
             <div class="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100">
               <img :src="item.image" :alt="item.name" class="w-full h-full object-cover">
             </div>
+            
             <div class="flex-grow">
-              <p class="font-bold text-[#6E4403] text-sm md:text-base leading-tight">{{ item.name }}</p>
-              <div class="flex justify-between items-center mt-1">
-                <p class="text-xs text-gray-500 font-medium">{{ formatRp(item.price) }} <span class="text-[#9C6307] font-bold ml-1">x{{ item.qty }}</span></p>
+              <p class="font-bold text-[#6E4403] text-sm leading-tight mb-2">{{ item.name }}</p>
+              
+              <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3 bg-[#FDF8F3] rounded-lg p-1 border border-[#EBC898]/40">
+                  <button @click="$emit('kurang', item.id)" class="w-7 h-7 flex items-center justify-center bg-white rounded-md shadow-sm text-[#9C6307] font-bold hover:bg-[#9C6307] hover:text-white transition-colors">-</button>
+                  <span class="font-black text-[#9C6307] min-w-[20px] text-center">{{ item.qty }}</span>
+                  <button @click="$emit('tambah', item)" class="w-7 h-7 flex items-center justify-center bg-white rounded-md shadow-sm text-[#9C6307] font-bold hover:bg-[#9C6307] hover:text-white transition-colors">+</button>
+                </div>
                 <p class="font-bold text-[#6E4403] text-sm">{{ formatRp(item.price * item.qty) }}</p>
               </div>
             </div>
